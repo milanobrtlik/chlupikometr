@@ -1,0 +1,279 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+"The `@defer` directive may be provided for fragment spreads and inline fragments to inform the executor to delay the execution of the current fragment to indicate deprioritization of the current fragment. A query with `@defer` directive will cause the request to potentially return multiple responses, where non-deferred data is delivered in the initial response and data deferred is delivered in a subsequent response. `@include` and `@skip` take precedence over `@defer`."
+directive @defer(
+    "Deferred when true."
+    if: Boolean,
+    "If this argument label has a value other than null, it will be passed on to the result of this defer directive. This label is intended to give client applications a way to identify to which fragment a deferred result belongs to."
+    label: String
+) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"The `@stream` directive may be provided for a field of `List` type so that the backend can leverage technology such as asynchronous iterators to provide a partial list in the initial response, and additional list items in subsequent responses. `@include` and `@skip` take precedence over `@stream`."
+directive @stream(
+    "Streamed when true."
+    if: Boolean,
+    "The initial elements that shall be send down to the consumer."
+    initialCount: Int! = 0,
+    "If this argument label has a value other than null, it will be passed on to the result of this stream directive. This label is intended to give client applications a way to identify to which fragment a streamed result belongs to."
+    label: String
+) on FIELD
+
+directive @authorize(
+    "Defines when when the resolver shall be executed.By default the resolver is executed after the policy has determined that the current user is allowed to access the field."
+    apply: ApplyPolicy! = BEFORE_RESOLVER,
+    "The name of the authorization policy that determines access to the annotated resource."
+    policy: String,
+    "Roles that are allowed to access the annotated resource."
+    roles: [String!]
+) on SCHEMA | OBJECT | FIELD_DEFINITION
+
+type Child {
+    id: Int!
+    name: String!
+    pictureUrl: String
+    points: Int!
+}
+
+type ChildPayload {
+    child: Child
+    errors: [UserError!]!
+}
+
+type ConfirmationPayload {
+    errors: [UserError!]!
+}
+
+type Family {
+    id: Int!
+    name: String!
+}
+
+type FamilyPayload {
+    errors: [UserError!]!
+    family: Family
+}
+
+type FamilyUser {
+    family: Family
+    kind: FamilyUserKind!
+}
+
+type Inventory {
+    description: String
+    iconData: Int
+    id: Int!
+    levels: [InventoryLevel!]!
+    title: String!
+}
+
+type InventoryLevel {
+    description: String
+    id: Int!
+    isInitial: Boolean!
+    reward: Int!
+    title: String!
+}
+
+type InventoryPayload {
+    errors: [UserError!]!
+    inventory: Inventory
+}
+
+type Ledger {
+    child: User!
+    description: String
+    enteredAt: DateTime!
+    id: Int!
+    parent: User!
+    parentNote: String
+    reward: Int!
+    title: String!
+}
+
+type LedgerPayload {
+    errors: [UserError!]!
+    ledger: Ledger
+}
+
+type LongLivedTokenPayload {
+    errors: [UserError!]!
+    longLivedToken: String
+}
+
+type Me {
+    email: String!
+    familyUser: [FamilyUser!]
+    id: Int!
+    name: String!
+    pictureUrl: String!
+}
+
+type Mutation {
+    childCreate(familyId: Int!, input: ChildCreateInput!): ChildPayload!
+    childUpdate(familyId: Int!, input: ChildUpdateInput!): ChildPayload!
+    familyCreate(input: FamilyCreateInput!): FamilyPayload!
+    familyUserInvite(familyId: Int!, kind: FamilyUserKind!): String
+    googleSignIn(idToken: String!): LongLivedTokenPayload!
+    inventoryCreate(familyId: Int!, input: InventoryCreateInput!): InventoryPayload!
+    inventoryUpdate(familyId: Int!, input: InventoryUpdateInput!, inventoryId: Int!): InventoryPayload!
+    joinFamily(token: String!): ConfirmationPayload!
+    leaveFamily(familyId: Int!): ConfirmationPayload!
+    ledgerInsert(familyId: Int!, input: LedgerInsertInput!): ConfirmationPayload!
+    removeFamily(familyId: Int!): ConfirmationPayload!
+    removeUserFromFamily(familyId: Int!, userId: Int!): ConfirmationPayload!
+    renameFamily(familyId: Int!, newName: String!): FamilyPayload!
+    shortLivedToken: ShortLivedTokenPayload!
+}
+
+type Query {
+    babysitters(familyId: Int!): [User!]!
+    children(familyId: Int!): [Child!]!
+    families: [Family!]!
+    inventoryDetail(familyId: Int!, id: Int!): InventoryPayload!
+    inventoryList(familyId: Int!): [Inventory!]!
+    ledgerDetail(familyId: Int!, id: Int!): LedgerPayload!
+    ledgerList(familyId: Int!, order: [LedgerSortInput!], where: LedgerFilterInput): [Ledger!]!
+    me: Me!
+    parents(familyId: Int!): [User!]!
+}
+
+type S3File {
+    id: Int!
+    url: String!
+}
+
+type ShortLivedTokenPayload {
+    errors: [UserError!]!
+    shortLivedToken: String
+}
+
+type User {
+    id: Int!
+    name: String!
+    pictureUrl: String
+}
+
+type UserError {
+    code: String!
+    message: String!
+}
+
+enum ApplyPolicy {
+    AFTER_RESOLVER
+    BEFORE_RESOLVER
+}
+
+enum FamilyUserKind {
+    BABYSITTER
+    CHILD
+    FOUNDER
+    PARENT
+}
+
+enum SortEnumType {
+    ASC
+    DESC
+}
+
+"The `DateTime` scalar represents an ISO-8601 compliant date time type."
+scalar DateTime
+
+"The `Upload` scalar type represents a file upload."
+scalar Upload
+
+input ChildCreateInput {
+    name: String!
+    picture: Upload!
+}
+
+input ChildRewardInput {
+    childId: Int!
+    reward: Int!
+}
+
+input ChildUpdateInput {
+    childId: Int!
+    name: String
+    picture: Upload
+}
+
+input ComparableDateTimeOperationFilterInput {
+    eq: DateTime
+    gt: DateTime
+    gte: DateTime
+    in: [DateTime!]
+    lt: DateTime
+    lte: DateTime
+    neq: DateTime
+    ngt: DateTime
+    ngte: DateTime
+    nin: [DateTime!]
+    nlt: DateTime
+    nlte: DateTime
+}
+
+input ComparableInt32OperationFilterInput {
+    eq: Int
+    gt: Int
+    gte: Int
+    in: [Int!]
+    lt: Int
+    lte: Int
+    neq: Int
+    ngt: Int
+    ngte: Int
+    nin: [Int!]
+    nlt: Int
+    nlte: Int
+}
+
+input FamilyCreateInput {
+    name: String!
+}
+
+input InventoryCreateInput {
+    description: String
+    levels: [InventoryLevelCreateInput!]!
+    title: String!
+}
+
+input InventoryLevelCreateInput {
+    description: String
+    reward: Int!
+    title: String!
+}
+
+input InventoryLevelUpdateInput {
+    description: String
+    levelId: Int
+    reward: Int
+    title: String
+}
+
+input InventoryUpdateInput {
+    description: String
+    levels: [InventoryLevelUpdateInput!]
+    title: String
+}
+
+input LedgerFilterInput {
+    and: [LedgerFilterInput!]
+    childId: ComparableInt32OperationFilterInput
+    enteredAt: ComparableDateTimeOperationFilterInput
+    or: [LedgerFilterInput!]
+}
+
+input LedgerInsertInput {
+    childRewards: [ChildRewardInput!]!
+    inventoryId: Int!
+    userNote: String
+}
+
+input LedgerSortInput {
+    enteredAt: SortEnumType
+}

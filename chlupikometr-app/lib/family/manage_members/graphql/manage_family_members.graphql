@@ -1,0 +1,62 @@
+query manageFamilyMembers($familyId: Int!) {
+    me {
+        id
+        familyUser {
+            kind
+            family {
+                id
+                name
+            }
+        }
+    }
+    parents(familyId: $familyId) {
+        id
+        name
+        pictureUrl
+    }
+    babysitters(familyId: $familyId) {
+        id
+        name
+        pictureUrl
+    }
+    children(familyId: $familyId) {
+        id
+        name
+        pictureUrl
+    }
+}
+
+mutation familyUserInvite($familyId: Int!, $kind: FamilyUserKind!) {
+    familyUserInvite(familyId: $familyId, kind: $kind)
+}
+
+mutation leaveFamily($familyId: Int!) {
+    leaveFamily(familyId: $familyId) {
+        errors {
+            code
+            message
+        }
+    }
+}
+
+mutation removeUser($familyId: Int!, $userId: Int!) {
+    removeUserFromFamily(familyId: $familyId, userId: $userId) {
+        errors {
+            code
+            message
+        }
+    }
+}
+
+mutation renameFamily($familyId: Int!, $newName: String!) {
+    renameFamily(familyId: $familyId, newName: $newName) {
+        family {
+            id
+            name
+        }
+        errors {
+            code
+            message
+        }
+    }
+}

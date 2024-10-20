@@ -1,0 +1,12 @@
+mutation familyCreate($input: FamilyCreateInput!) {
+    familyCreate(input: $input) {
+        family {
+            id
+            name
+        }
+        errors {
+            code
+            message
+        }
+    }
+}

@@ -1,0 +1,20 @@
+image: mcr.microsoft.com/dotnet/sdk:6.0-alpine
+
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  only:
+    - master
+  script:
+    - apk add --update --no-cache openssh-client bash
+    - eval $(ssh-agent -s)
+    - echo "$SCW_PK" | ssh-add - > /dev/null
+    - mkdir "${HOME}/.ssh"
+    - echo "$KNOWN_HOSTS" >> ~/.ssh/known_hosts
+    - "dotnet publish -r linux-x64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --self-contained true -c Release"
+    - "scp /builds/milanobrtlik/chlupikometr-api/bin/Release/net6.0/linux-x64/publish/Chlupikometr ubuntu@51.15.126.107:/var/www/chlupikometr/chlupikometr_tmp"
+    - ssh ubuntu@51.15.126.107 sudo systemctl stop chlupikometr.service
+    - ssh ubuntu@51.15.126.107 mv /var/www/chlupikometr/chlupikometr_tmp /var/www/chlupikometr/chlupikometr
+    - ssh ubuntu@51.15.126.107 sudo systemctl start chlupikometr.service

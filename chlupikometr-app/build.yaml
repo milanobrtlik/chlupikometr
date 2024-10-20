@@ -1,0 +1,20 @@
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          include_if_null: false
+      graphql_codegen:
+        options:
+          clients:
+            - graphql
+          scalars:
+            DateTime:
+              type: DateTime
+            Upload:
+              type: Upload
+              fromJsonFunctionName: uploadFromJson
+              toJsonFunctionName: uploadToJson
+              import: 'package:chlupikometr_lite/common/graphql/scalar.dart'
+#              type: MultipartFile
+#              import: 'package:http/http.dart'

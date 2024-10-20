@@ -1,0 +1,28 @@
+query ledgerChildDetail($familyId: Int!, $where: LedgerFilterInput, $order: [LedgerSortInput!]) {
+    ledgerList(familyId: $familyId, where: $where, order: $order) {
+        id
+        title
+        reward
+        enteredAt
+        parent {
+            pictureUrl
+        }
+    }
+}
+
+query ledgerRecordDetail($familyId: Int!, $id: Int!) {
+    ledgerDetail(familyId: $familyId, id: $id) {
+        ledger {
+            id
+            title
+            description
+            enteredAt
+            reward
+            parent {
+                name
+                pictureUrl
+            }
+            parentNote
+        }
+    }
+}

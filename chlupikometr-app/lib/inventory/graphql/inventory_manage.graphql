@@ -1,0 +1,40 @@
+mutation inventoryCreate($familyId: Int!, $input: InventoryCreateInput!) {
+    inventoryCreate(familyId: $familyId, input: $input) {
+        inventory {
+            ...inventory
+        }
+        errors {
+            code
+            message
+        }
+    }
+}
+
+mutation inventoryUpdate($familyId: Int!, $input: InventoryUpdateInput!, $inventoryId: Int!) {
+    inventoryUpdate(familyId: $familyId, input: $input, inventoryId: $inventoryId) {
+        inventory {
+            ...inventory
+        }
+        errors {
+            code
+            message
+        }
+    }
+}
+
+fragment inventory on Inventory {
+    id
+    title
+    description
+    iconData
+    levels {
+        ...level
+    }
+}
+
+fragment level on InventoryLevel {
+    id
+    title
+    description
+    reward
+}

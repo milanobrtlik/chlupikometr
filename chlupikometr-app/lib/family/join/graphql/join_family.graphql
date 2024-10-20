@@ -1,0 +1,8 @@
+mutation joinFamily($token: String!) {
+    joinFamily(token: $token) {
+        errors {
+            code
+            message
+        }
+    }
+}

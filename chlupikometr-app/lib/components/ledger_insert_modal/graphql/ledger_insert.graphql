@@ -1,0 +1,31 @@
+mutation ledgerInsert($familyId: Int!, $input: LedgerInsertInput!) {
+    ledgerInsert(familyId: $familyId input: $input) {
+        errors {
+            code
+            message
+        }
+    }
+}
+
+query ledgerInsertDetail($id: Int!, $familyId: Int!) {
+    inventoryDetail(id: $id, familyId: $familyId) {
+        inventory {
+            id
+            title
+            levels {
+                id
+                title
+                reward
+                isInitial
+                description
+            }
+            description
+            iconData
+        }
+    }
+    children(familyId: $familyId) {
+        id
+        name
+        pictureUrl
+    }
+}

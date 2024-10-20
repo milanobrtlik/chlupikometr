@@ -1,0 +1,27 @@
+mutation createChild($familyId: Int!, $input: ChildCreateInput!) {
+    childCreate(familyId: $familyId, input: $input) {
+        child {
+            id
+            name
+            pictureUrl
+        }
+        errors {
+            code
+            message
+        }
+    }
+}
+
+mutation updateChild($familyId: Int!, $input: ChildUpdateInput!) {
+    childUpdate(familyId: $familyId, input: $input) {
+        child {
+            id
+            name
+            pictureUrl
+        }
+        errors {
+            code
+            message
+        }
+    }
+}

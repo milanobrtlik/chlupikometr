@@ -1,0 +1,19 @@
+mutation googleSignIn($idToken: String!) {
+    googleSignIn(idToken: $idToken) {
+        longLivedToken
+        errors {
+            message
+            code
+        }
+    }
+}
+
+mutation refreshToken {
+    shortLivedToken {
+        shortLivedToken
+        errors {
+            message
+            code
+        }
+    }
+}
